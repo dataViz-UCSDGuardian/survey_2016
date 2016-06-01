@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <style>
+      .chart_div {
+        margin: 0 auto;
+        width: 1000px;
+        height: 500px;
+      }
+      .download_png {
+        float: right;
+      }
+      .chart_container {
+        width: 1000px;
+        height: 550px;
+        margin: 0 auto;
+        border-bottom: 1px solid #000;
+        padding: 5px;
+      }
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="output.json"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var chart_keys = ["in_state_out_of_state", "quarterly_fee_amount", "student_contribution", "state_contribution", "medical_centers"]
+        
+        var chart_titles = ["For the 2015-2016 school year, how much more do you estimate out of state students are paying annually compared to in-state students?",
+        "How much do you think you are paying in student fees quarterly?",
+        "Across the UC System, Student Expenditures are divided between Student Tuition/Fees, UC General Funds, and State General Funds. In 2001, Student Tuition/Fees accounted for about 18.8% while State General funds accounted for 72%. Today, what percentage do you believe students are paying?",
+        "And what percentage do you think the state is paying?",
+        "And finally, what percentage of UCSD's budget do you think is being spent on the medical centers?"
+        ]
+        var colors_for_charts;
+
+        //Comment this below object to get default colors for pie charts
+        colors_for_charts = {
+          "in_state_out_of_state": ["#99ff99", "#99ff99", "00cc00", "#99ff99"],
+          "quarterly_fee_amount" : ['#66b2ff', "#66b2ff", "#66b2ff", "#0000FF", "66b2ff", "66b2ff"],
+          "student_contribution": ["#ff8888", "#ff8888", "#ff8888", "#ff8888", "#cc0000", "#ff8888"],
+          "state_contribution": ["#ffcc99", "#ff8000", "#ffcc99", "#ffcc99", "#ffcc99", "#ffcc99", "#ffcc99"],
+          "medical_centers": ["#b266ff", "#b266ff", "#6600cc", "#b266ff", "#b266ff"]
+        }
+        for (var idx = 0, length = 0; idx < chart_titles.length; idx++) {
+          var dataForChart = dumped_data[chart_keys[idx]]
+          var data = google.visualization.arrayToDataTable(dataForChart);
+          var options = {
+            title: chart_titles[idx],
+            fontSize: 18,
+            pieSliceText: 'none',
+            legend: {
+              position: 'labeled',
+              textStyle: {fontSize: 18}
+            }
+          };
+          if (colors_for_charts && colors_for_charts[chart_keys[idx]]) {
+            options.colors = colors_for_charts[chart_keys[idx]]
+          }
+          var chart = new google.visualization.PieChart(document.getElementById('piechart' + (idx + 1)));
+          
+          google.visualization.events.addListener(chart, 'ready', function () {
+            var a_container = document.getElementById('png' + (idx + 1));
+            //a_container.outerHTML = '<a href="' + chart.getImageURI() + '">PNG</a>';
+            a_container.href = chart.getImageURI();
+          });
+          chart.draw(data, options);
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="chart_container">
+      <div id="piechart1" class="chart_div"></div>
+      <div class="download_png">
+        <a id="png1" href="">Save as PNG</a>
+      </div>
+    </div>
+
+    <div class="chart_container">
+      <div id="piechart2" class="chart_div"></div>
+      <div class="download_png">
+        <a id="png2" href="">Save as PNG</a>
+      </div>
+    </div>
+
+    <div class="chart_container">
+      <div id="piechart3" style="width: 1000px; height: 500px;" class="chart_div"></div>
+      <div class="download_png">
+        <a id="png3" href="">Save as PNG</a>
+      </div>
+    </div>
+
+    <div class="chart_container">
+      <div id="piechart4" style="width: 1000px; height: 500px;" class="chart_div"></div>
+      <div class="download_png">
+        <a id="png4" href="">Save as PNG</a>
+      </div>
+    </div>
+
+    <div class="chart_container">
+      <div id="piechart5" style="width: 1000px; height: 500px;" class="chart_div"></div>
+      <div class="download_png">
+        <a id="png5" href="">Save as PNG</a>
+      </div>
+    </div>
+  </body>
+</html>
